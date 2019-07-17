@@ -1,4 +1,4 @@
 config.env
 .vs
-bin
-obj
+Backend/bin
+Backend/obj
