@@ -1,0 +1,4 @@
+config.env
+.vs
+bin
+obj
