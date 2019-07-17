@@ -1,9 +1,11 @@
 global:
-  ImageRegistry: akswsweuacr.azurecr.io
+  ImageRegistry: akswsweuacr.azurecr.io  
   HealthChecks:
     enabled: false
   ResourceManagement:
     enabled: false
+  Ingress:
+    enabled: true
   Frontend:
     ServiceName: frontend
     Port: 80
