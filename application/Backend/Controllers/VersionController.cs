@@ -9,6 +9,10 @@ namespace Backend.Controllers
     {
         private const string DEFAULT_VERSION = "0.0.0.0";
 
+        /// <summary>
+        /// Gets the current version of the appliction
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<Version> Get()
         {

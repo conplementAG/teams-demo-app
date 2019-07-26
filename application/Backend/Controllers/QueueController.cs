@@ -14,6 +14,10 @@ namespace Backend.Controllers
 
         private static readonly List<DateTime> QUEUE = new List<DateTime>();
         
+        /// <summary>
+        /// Adds items to the queue
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult<int> Add()
         {
@@ -23,6 +27,10 @@ namespace Backend.Controllers
             return QUEUE.Count;
         }
         
+        /// <summary>
+        /// Gets the current items in the queue
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<IEnumerable<DateTime>> Get()
         {
