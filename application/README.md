@@ -12,7 +12,7 @@ There is an example application that consists of two components.
 ### docker-compose
 
 ```bash
-docker-compse up --build
+docker-compose up --build
 ```
 
 Browse to http://localhost:8080
