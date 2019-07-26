@@ -14,6 +14,8 @@ class AppRoot extends React.Component {
             backend_version: "unknown",
             backend_host: window.BACKEND_HOST
         };
+
+        this.addTeamMember = this.addTeamMember.bind(this);
     }
 
     componentDidMount() {
@@ -77,6 +79,45 @@ class AppRoot extends React.Component {
         return this.state.selectedTeam.teamName === teamName;
     }
 
+    deleteMember(name, role, teamName) {
+        fetch(this.state.backend_host + "/api/team/" + teamName,
+            {
+                method: 'delete',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, role: role })
+            })
+            .then(() => {
+                this.selectTeam(teamName)
+            },
+                (error) => {
+                    console.error("Error deleting team member")
+                    console.error(error)
+                    this.setState({ error: "Could not delete team member" });
+                }
+            )
+    }
+
+    addTeamMember(event) {
+        console.log("adding team member");
+        event.preventDefault();
+        const data = new FormData(event.target);
+
+        let teamName = this.state.selectedTeam.teamName;
+        fetch(this.state.backend_host + '/api/team/' + teamName, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: data.get('name'), role: data.get('role') })
+        }).then(() => {
+            this.selectTeam(teamName)
+        },
+            (error) => {
+                console.error("Error adding a new team member")
+                console.error(error)
+                this.setState({ error: "Could not add a new team member" });
+            }
+        )
+    }
+
     render() {
 
         let that = this;
@@ -101,11 +142,44 @@ class AppRoot extends React.Component {
                             if (that.isTeamSelected(teamName)) {
                                 selectedClass = " selected"
                             }
-                            return <div key={ i } className={ "box" + selectedClass } onClick={ () => that.selectTeam(teamName) }><a href="#">{ teamName }</a> <i className='fas fa-angle-right'></i></div>
+                            return (<div key={ i } className={ "box" + selectedClass } onClick={ () => that.selectTeam(teamName) }>
+                                <a href="#">{ teamName }</a> <i className='fas fa-angle-right'></i>
+                            </div>)
                         })
                     }
                 </div>
             )
+        }
+
+        let teamExtension;
+
+        if (this.state.selectedTeam !== undefined) {
+            teamExtension = (
+                <div className="group">
+                    <h4>Add members to { this.state.selectedTeam.teamName }</h4>
+
+                    <form onSubmit={ this.addTeamMember }>
+                        <div className="form-group row">
+                            <label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
+                            <div className="col-sm-10">
+                                <input className="form-control" id="name" name="name" type="text" required />
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label htmlFor="name" className="col-sm-2 col-form-label">Role</label>
+                            <div className="col-sm-10">
+                                <input className="form-control" id="name" name="role" type="text" required />
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <button type="submit" className="btn btn-primary">Add new member</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>)
+        } else {
+            teamExtension = <div></div>;
         }
 
         let teamMembers
@@ -114,11 +188,21 @@ class AppRoot extends React.Component {
             teamMembers = (
                 <div>
                     <h3>Team Members</h3>
+                    { teamExtension }
                     { this.state.selectedTeam.members.map(function (member, i) {
                         return (
                             <div className="box" key={ i }>
-                                Name: { member.name }<br />
-                                Role: { member.role }
+                                <div className="row">
+                                    <div className="col-sm-10">
+                                        Name: { member.name }<br />
+                                        Role: { member.role }<br />
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <div className="float-right">
+                                            <button onClick={ () => that.deleteMember(member.name, member.role, that.state.selectedTeam.teamName) } type="button" className="btn btn-danger"><i className="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>)
                     }) }
                 </div>
@@ -141,7 +225,13 @@ class AppRoot extends React.Component {
                 </div>
                 <div className="content">
                     <small><i className="fas fa-info-circle"></i> Here some ajax request will be performed</small><br />
-                    <a href={ this.state.backend_host + "/health/ready" } target="_blank">Backend: { this.state.backend_host } <span className="badge badge-secondary">{ this.state.backend_version }</span></a>
+                    <a href={ this.state.backend_host + "/health/ready" } target="_blank">Backend: { this.state.backend_host }
+                        <span className="badge badge-secondary">{ this.state.backend_version }</span>
+                    </a>
+                    <a href={ this.state.backend_host + "/swagger" } target="_blank">
+                        Swagger
+                        <img src="images/swagger.jpg" alt="Swagger" title="Swagger" />
+                    </a>
                     <div>
                         <h3>Teams</h3>
                         { teamSelection }

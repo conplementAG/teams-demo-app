@@ -30,7 +30,12 @@ namespace Backend
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo App API", Version = "v1" });
+                options.SwaggerDoc("v1", 
+                    new OpenApiInfo {
+                        Title = "Demo App API",
+                        Version = "v1",
+                        Description = "This is a simple example application for demonstrating various concepts in containerized application."
+                    });
                 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -39,11 +44,14 @@ namespace Backend
             });
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAnyOrigin", builder => builder.AllowAnyOrigin().AllowAnyMethod());
+                options.AddPolicy("AllowEverything", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
             });
             services.Configure<MvcOptions>(options =>
             {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAnyOrigin"));
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowEverything"));
             });
 
             services.AddHealthChecks();
