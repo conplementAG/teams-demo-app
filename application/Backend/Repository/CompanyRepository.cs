@@ -30,5 +30,48 @@ namespace Backend.Repository
                 .Select(t => t.TeamName)
                 .ToList();
         }
+
+        public void AddTeam(string teamName)
+        {
+            lock (_teams)
+            {
+                _teams.Add(new Team() {
+                    TeamName = teamName,
+                    Members = new List<TeamMember>()}
+                );
+            }
+        }
+
+        public void DeleteTeam(string teamName)
+        {
+            lock(_teams)
+            {
+                _teams.RemoveAll(t => string.Compare(t.TeamName, teamName, true) == 0);
+            }
+        }
+
+        public void AddTeamMember(TeamMember teamMember, string teamName)
+        {
+            var team = _teams.FirstOrDefault(t => t.TeamName == teamName);
+            if(team != null)
+            {
+                lock (team)
+                {
+                    team.Members.Add(teamMember);
+                }
+            }
+        }
+
+        public void RemoveTeamMemer(TeamMember teamMember, string teamName)
+        {
+            var team = _teams.FirstOrDefault(t => t.TeamName == teamName);
+            if (team != null)
+            {
+                lock (team)
+                {
+                    team.Members.Remove(teamMember);
+                }
+            }
+        }
     }
 }
