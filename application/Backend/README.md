@@ -24,7 +24,7 @@ dotnet run Backend.dll
 ### Docker
 ```bash
 docker build . -t workshop/backend
-docker run -it --rm -p 8080:80 -e ASPNETCORE_URLS=http://+:5000 workshop/backend
+docker run -it --rm -p 8080:5000 -e ASPNETCORE_URLS=http://+:5000 workshop/backend
 ```
 
 Browse to https://localhost:8080/api/team
