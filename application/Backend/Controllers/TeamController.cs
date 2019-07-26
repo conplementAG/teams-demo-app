@@ -12,7 +12,7 @@ namespace Backend.Controllers
     [ApiController]
     public class TeamController : ControllerBase
     {
-        private CompanyRepository _companyRepo = new CompanyRepository();
+        private static readonly CompanyRepository _companyRepo = new CompanyRepository();
 
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
