@@ -1,5 +1,5 @@
 global:
-  ImageRegistry: akswsweuacr.azurecr.io  
+  ImageRegistry: docker.io
   HealthChecks:
     enabled: false
   ResourceManagement:

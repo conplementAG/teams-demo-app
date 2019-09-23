@@ -1,5 +1,5 @@
-ImageName: workshop/frontend
-ImageVersion: latest
+ImageName: conplementag/teams-demo-app-frontend
+ImageVersion: 1.0.0
 ReplicaCount: 3
 
 Settings:
