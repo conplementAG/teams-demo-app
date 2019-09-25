@@ -49,7 +49,7 @@ docker push <docker registry url>/workshop/backend:latest
 # Install the nginx ingress controller
 helm install --namespace <yournamespace> --name ingress-controller-release stable/nginx-ingress
 
-# Install the acutal application
+# Install the actual application
 helm install --namespace <yournamespace> --name example-application-release example-application
 ```
 
